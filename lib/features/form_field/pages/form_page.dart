@@ -1,4 +1,5 @@
 import 'package:assignment_app/core/models/user.dart';
+import 'package:assignment_app/core/utils/snack_bar.dart';
 import 'package:assignment_app/core/widgets/custom_app_bar.dart';
 import 'package:assignment_app/core/widgets/custom_form_field.dart';
 import 'package:assignment_app/core/widgets/custom_out_button.dart';
@@ -33,7 +34,7 @@ class _UserFormPageState extends State<UserFormPage> {
     super.dispose();
   }
 
-  void _submitForm() {
+  void _submitForm(BuildContext context) {
     if (_formKey.currentState!.validate() &&
         _selectedGender!.isNotEmpty &&
         _country!.isNotEmpty &&
@@ -49,10 +50,8 @@ class _UserFormPageState extends State<UserFormPage> {
         state: _state!,
         city: _city!,
       );
+      showSnackBar(context, "Form submitted successfully!");
       context.read<FormPageBloc>().add(FormSubmitEvent(user: user));
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Form submitted successfully!')),
-      );
     }
   }
 
@@ -191,7 +190,9 @@ class _UserFormPageState extends State<UserFormPage> {
                 // Submit Button
                 Center(
                   child: CustomOutBtn(
-                    onTap: _submitForm,
+                    onTap: () {
+                      _submitForm(context);
+                    },
                     width: MediaQuery.of(context).size.width * 0.9,
                     height: 60,
                     color: Colors.white,
